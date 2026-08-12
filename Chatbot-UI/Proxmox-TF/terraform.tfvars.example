@@ -1,7 +1,0 @@
-proxmox_api_url          = "https://192.168.1.100:8006/api2/json"
-proxmox_api_token_id      = "root@pam!terraform"
-proxmox_api_token_secret  = "00000000-0000-0000-0000-000000000000"
-target_node              = "pve"
-template_name            = "ubuntu-2204-cloudinit"
-storage_name             = "local-lvm"
-ssh_public_key           = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQ..."
