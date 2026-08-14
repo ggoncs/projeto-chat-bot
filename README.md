@@ -18,11 +18,14 @@ A migração de uma stack da AWS para um ambiente virtualizado local é um exerc
 
 A automação deste projeto substitui o Jenkins por um Self-Hosted Runner do GitHub rodando dentro da rede local. Como agentes locais apresentam vetores de ataque para execução remota de código (RCE) e movimentação lateral, a segurança da esteira foi implementada com as seguintes diretrizes restritivas:
 
+* Segmentação de Rede (DMZ via pfSense): Todo o provisionamento da infraestrutura (VM, cluster K3s e o runner local) foi realizado em uma sub-rede isolada, tratada como DMZ e gerenciada por um firewall pfSense. As regras de filtragem de pacotes impedem que qualquer conexão originada na DMZ estabeleça comunicação com a rede interna privada (LAN).
 * Execução Efêmera (--ephemeral): O agente de execução processa estritamente um único job e é finalizado pelo serviço logo em seguida. Isso garante que caches maliciosos, credenciais residuais ou alterações no sistema de arquivos não persistam entre execuções.
 * Isolamento de Privilégios (Least Privilege): O runner é operado sob um usuário Linux dedicado, sem privilégios administrativos (sem acesso de sudo), mitigando o risco de escalonamento de privilégios caso um contêiner sofra bypass.
 * Workflow Hardening:
     * Permissões Estritas: O escopo do GITHUB_TOKEN no workflow é limitado explicitamente à permissão de leitura (permissions: contents: read).
     * Pinagem por SHA: O consumo de Actions de terceiros no arquivo de deploy utiliza hashes SHA imutáveis (ex: uses: actions/checkout@b4ffde65f4...) em vez de tags de versão (ex: @v3), prevenindo ataques à cadeia de suprimentos (Supply Chain Attacks).
 * Restrição de Forks: O repositório e o runner estão configurados para exigir aprovação manual antes de executar qualquer código proveniente de Pull Requests externos.
+
+
 
 ### Baseado no projeto: https://github.com/DevCloudNinjas/DevOps-Projects/tree/master/project-28-openai-chatbot-eks
